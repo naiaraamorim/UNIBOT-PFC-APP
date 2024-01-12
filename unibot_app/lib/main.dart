@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('UNIBOT'),
-          titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+          titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
           backgroundColor: Colors.green,
         ),
-        body: ChatScreen(),
+        body: const ChatScreen(),
       ),
     );
   }
@@ -46,11 +48,15 @@ class ChatScreenState extends State<ChatScreen> {
         ),
         // Área de entrada de texto
         const Divider(height: 1.0),
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.green[200],
+                border: Border.all(color: Colors.green, width: 2),
+                borderRadius: BorderRadius.circular(8)),
+            child: _buildTextComposer(),
           ),
-          child: _buildTextComposer(),
         ),
       ],
     );
@@ -100,7 +106,7 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final bool isUser;
 
-  const ChatMessage({required this.text, required this.isUser});
+  const ChatMessage({super.key, required this.text, required this.isUser});
 
   @override
   Widget build(BuildContext context) {
