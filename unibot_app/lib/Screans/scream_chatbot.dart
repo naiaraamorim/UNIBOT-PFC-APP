@@ -25,6 +25,17 @@ class ChatScreenState extends State<ChatScreen> {
             itemBuilder: (_, index) => _messages[index],
           ),
         ),
+        if (_messages.isEmpty)
+          Container(
+            height: 250,
+            alignment: Alignment.topCenter,
+            child: const Text(
+              'Tire suas dúvidas sobre a instituição',
+              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w100),
+            ),
+          ),
+        // Área centralizada de instruções se não houver mensagens
+
         // Área de entrada de texto
         const Divider(height: 1.0),
         Padding(
@@ -42,6 +53,7 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildTextComposer() {
+    // Caixa de texto de entrada
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).canvasColor),
       child: Container(

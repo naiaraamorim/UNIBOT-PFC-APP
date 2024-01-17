@@ -5,7 +5,6 @@ class ChatMessage extends StatelessWidget {
   final bool isUser;
 
   const ChatMessage({super.key, required this.text, required this.isUser});
-
   @override
   Widget build(BuildContext context) {
     return Container(
