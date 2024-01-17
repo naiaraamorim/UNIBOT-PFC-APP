@@ -16,6 +16,8 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
           title: const Text('UNIBOT'),
           titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+          iconTheme: const IconThemeData(
+              color: Colors.white), // Defina a cor do ícone aqui
           backgroundColor: Colors.green,
         ),
         drawer: Drawer(
@@ -23,15 +25,18 @@ class MyApp extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                ),
-                child: Text(
-                  'Menu Lateral',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
+              const SizedBox(
+                height: 100,
+                child: DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                  ),
+                  child: Text(
+                    'Menu Lateral',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
                   ),
                 ),
               ),
