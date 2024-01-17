@@ -1,35 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:unibot_app/components/avatar.dart';
 
-class ScreanChatbot extends StatefulWidget {
-  const ScreanChatbot({super.key});
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
 
   @override
-  State<ScreanChatbot> createState() => _ScreanChatbotState();
+  ChatScreenState createState() => ChatScreenState();
 }
 
-class _ScreanChatbotState extends State<ScreanChatbot> {
-  TextEditingController inputController = TextEditingController();
+class ChatScreenState extends State<ChatScreen> {
+  final TextEditingController _textController = TextEditingController();
+  final List<ChatMessage> _messages = [];
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('UNIBOT'),
-          titleTextStyle: const TextStyle(
-              color: Colors.white, fontSize: 20, fontFamily: ''),
-          backgroundColor: Colors.green,
+    return Column(
+      children: <Widget>[
+        // Área de mensagens
+        Flexible(
+          child: ListView.builder(
+            padding: const EdgeInsets.all(8.0),
+            reverse: true,
+            itemCount: _messages.length,
+            itemBuilder: (_, index) => _messages[index],
+          ),
         ),
-        body: Column(
-          children: [
-            SizedBox(
-              width: 100,
+        // Área de entrada de texto
+        const Divider(height: 1.0),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.green[200],
+                border: Border.all(color: Colors.green, width: 2),
+                borderRadius: BorderRadius.circular(8)),
+            child: _buildTextComposer(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextComposer() {
+    return IconTheme(
+      data: IconThemeData(color: Theme.of(context).canvasColor),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              child: TextField(
+                controller: _textController,
+                onSubmitted: _handleSubmitted,
+                decoration: const InputDecoration.collapsed(
+                  hintText: 'Enviar uma mensagem',
+                ),
+              ),
             ),
-            TextField(
-              controller: inputController,
-            )
+            IconButton(
+              icon: const Icon(
+                Icons.send,
+                color: Colors.green,
+              ),
+              onPressed: () => _handleSubmitted(_textController.text),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _handleSubmitted(String text) {
+    _textController.clear();
+    ChatMessage message = ChatMessage(
+      text: text,
+      isUser: true,
+    );
+    setState(() {
+      _messages.insert(0, message);
+    });
+
+    // Aqui você pode adicionar lógica para responder ou processar a mensagem
   }
 }
