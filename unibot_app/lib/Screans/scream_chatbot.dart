@@ -1,8 +1,73 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:unibot_app/components/avatar.dart';
+import 'package:http/http.dart' as http;
+
+// Defina a classe ChatMessage aqui
+class ChatMessage extends StatelessWidget {
+  final String text;
+  final bool isUser;
+
+  const ChatMessage({Key? key, required this.text, required this.isUser})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          isUser
+              ? Expanded(
+                  child: Container(),
+                )
+              : Container(
+                  margin: const EdgeInsets.only(right: 5.0),
+                  child: const CircleAvatar(
+                    child: Text('B'),
+                  ),
+                ),
+          Expanded(
+            flex: 5,
+            child: Column(
+              crossAxisAlignment:
+                  isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    color: isUser
+                        ? Colors.green
+                        : Colors
+                            .blue, // Escolha a cor do balão de acordo com o remetente
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Text(
+                    text,
+                    style: const TextStyle(fontSize: 16.0, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          isUser
+              ? Container(
+                  margin: const EdgeInsets.only(left: 5.0),
+                  child: const CircleAvatar(
+                    child: Text('U'),
+                  ),
+                )
+              : Expanded(
+                  child: Container(),
+                ),
+        ],
+      ),
+    );
+  }
+}
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
   ChatScreenState createState() => ChatScreenState();
@@ -11,6 +76,27 @@ class ChatScreen extends StatefulWidget {
 class ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textController = TextEditingController();
   final List<ChatMessage> _messages = [];
+
+  Future<void> sendMessage(String message) async {
+    final response = await http.post(
+      Uri.parse('http://192.168.18.13:5005/webhooks/rest/webhook'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'message': message}),
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> responseData = jsonDecode(response.body);
+      setState(() {
+        _messages.add(ChatMessage(text: message, isUser: true));
+        _messages
+            .add(ChatMessage(text: responseData[0]['text'], isUser: false));
+      });
+    } else {
+      throw Exception('Failed to send message');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +108,6 @@ class ChatScreenState extends State<ChatScreen> {
           Flexible(
             child: ListView.builder(
               padding: const EdgeInsets.all(8.0),
-              reverse: true,
               itemCount: _messages.length,
               itemBuilder: (_, index) => _messages[index],
             ),
@@ -36,10 +121,7 @@ class ChatScreenState extends State<ChatScreen> {
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w100),
               ),
             ),
-          // Área centralizada de instruções se não houver mensagens
-
           // Área de entrada de texto
-
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -87,14 +169,6 @@ class ChatScreenState extends State<ChatScreen> {
 
   void _handleSubmitted(String text) {
     _textController.clear();
-    ChatMessage message = ChatMessage(
-      text: text,
-      isUser: true,
-    );
-    setState(() {
-      _messages.insert(0, message);
-    });
-
-    // Aqui você pode adicionar lógica para responder ou processar a mensagem
+    sendMessage(text);
   }
 }
