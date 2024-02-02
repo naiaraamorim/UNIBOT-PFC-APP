@@ -122,15 +122,19 @@ class ChatScreenState extends State<ChatScreen> {
         final responseData = jsonDecode(response.body);
         _isBotTyping = true; // Ativar indicador de digitação do bot
         setState(() {});
-        await Future.delayed(const Duration(seconds: 1)); // Simular digitação
+        await Future.delayed(
+            const Duration(milliseconds: 1500)); // Simular digitação
         _addMessage(responseData[0]['text'], false);
         _isBotTyping = false; // Desativar indicador de digitação do bot
         setState(() {});
       } else {
-        throw Exception('Failed to send message');
+        throw Exception('Mensagem não enviada!!');
       }
       // ignore: empty_catches
-    } catch (e) {}
+    } catch (e) {
+      _isBotTyping = false;
+      setState(() {});
+    }
   }
 
   void _addMessage(String text, bool isUser) {
