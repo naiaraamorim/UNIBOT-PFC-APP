@@ -14,11 +14,11 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('UNIBOT'),
-          titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+          title: const Text('ADABOT'),
+          titleTextStyle: const TextStyle(color: Colors.white, fontSize: 21),
           iconTheme: const IconThemeData(
               color: Colors.white), // Defina a cor do ícone aqui
-          backgroundColor: Colors.green,
+          backgroundColor: const Color.fromARGB(255, 5, 158, 7),
         ),
         drawer: Drawer(
           // Conteúdo do menu lateral
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
                 height: 100,
                 child: DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: Color.fromARGB(255, 5, 158, 7),
                   ),
                   child: Text(
                     'Menu Lateral',
@@ -41,13 +41,13 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               ListTile(
-                title: const Text('Item 1'),
+                title: const Text('Sobre'),
                 onTap: () {
                   // Adicione aqui a lógica para lidar com o clique em Item 1
                 },
               ),
               ListTile(
-                title: const Text('Item 2'),
+                title: const Text('Sair'),
                 onTap: () {
                   // Adicione aqui a lógica para lidar com o clique em Item 2
                 },
