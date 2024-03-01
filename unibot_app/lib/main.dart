@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('ADABOT'),
+          title: const Text('UNIBOT'),
           titleTextStyle: const TextStyle(color: Colors.white, fontSize: 21),
           iconTheme: const IconThemeData(
               color: Colors.white), // Defina a cor do ícone aqui
